@@ -25,4 +25,10 @@ describe('Ship Class', () => {
         ship.hit();
         expect(ship.isSunk).toBe(false);
     });
+    
+    test('getHits returns correct number', () => {
+        const ship = new Ship(3);
+        ship.hit();
+        expect(ship.getHits()).toBe(1);
+      });
 });
