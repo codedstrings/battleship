@@ -27,5 +27,15 @@ class GameBoard{
     #isPlacementValid(x, y) {
         return x >= 0 && x < 10 && y >= 0 && y < 10 && this.board[x][y] === null;
     }
+
+    receiveAttack(x, y){
+        if(this.board[x][y] === null){
+            this.missedShots.push([x, y]);
+        }else{
+            //call ships hit function
+            this.board[x][y].hit();
+        }
+    }
+    
 }
 exports.GameBoard = GameBoard;
