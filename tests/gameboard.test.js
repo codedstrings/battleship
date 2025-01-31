@@ -50,4 +50,35 @@ describe('Gameboard', () => {
       gameboard.receiveAttack(1, 0);
       expect(gameboard.missedShots).toEqual([[1, 0]]);
     });
-  });
+
+    describe('allSunk', ()=>{
+      beforeEach(()=>{
+        gameboard = new GameBoard();
+        ship1 = new Ship(3);
+        ship2 = new Ship(3);
+        gameboard.placeShip(ship1, 0, 0, false);
+        gameboard.placeShip(ship2, 1, 0, false);
+      });
+
+      test('returns true when all ships are sunk', ()=>{
+        gameboard.receiveAttack(0, 0);
+        gameboard.receiveAttack(0, 1);
+        gameboard.receiveAttack(0, 2);
+        gameboard.receiveAttack(1, 0);
+        gameboard.receiveAttack(1, 1);
+        gameboard.receiveAttack(1, 2);
+        expect(gameboard.allSunk()).toBe(true);
+      });
+
+      test('returns false when not all ships are sunk', ()=>{
+        gameboard.receiveAttack(0, 0);
+        gameboard.receiveAttack(0, 1);
+        gameboard.receiveAttack(0, 2);
+        expect(gameboard.allSunk()).toBe(false);
+      });
+
+      test('returns false when no ships are sunk', ()=>{
+        expect(gameboard.allSunk()).toBe(false);
+      });
+    });
+});

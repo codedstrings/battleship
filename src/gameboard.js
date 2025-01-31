@@ -2,6 +2,7 @@ class GameBoard{
     constructor(){
         this.board = Array(10).fill(null).map(() => Array(10).fill(null));
         this.missedShots = [];
+        this.allShips = [];
     }
     placeShip(ship, x, y, isVertical){
         if(isVertical){
@@ -21,6 +22,7 @@ class GameBoard{
                 }
             }
         }
+        this.allShips.push(ship);
         return true;
     }
 
@@ -37,5 +39,8 @@ class GameBoard{
         }
     }
     
+    allSunk(){
+        return this.allShips.every(ship => ship.isSunk);
+    }
 }
 exports.GameBoard = GameBoard;
