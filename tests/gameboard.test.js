@@ -81,4 +81,49 @@ describe('Gameboard', () => {
         expect(gameboard.allSunk()).toBe(false);
       });
     });
+
+    describe('isPlacementValid', ()=>{
+      test('prevents overlapping placement', () => {
+        const gameboard = new GameBoard();
+        const ship1 = new Ship(3);
+        const ship2 = new Ship(3);
+        gameboard.placeShip(ship1, 0, 0, false);
+        expect(gameboard.placeShip(ship2, 0, 0, false)).toBe(false);
+      });
+      
+      test('prevents half overlapping placement', () => {
+        const gameboard = new GameBoard();
+        const ship1 = new Ship(3);
+        const ship2 = new Ship(3);
+        gameboard.placeShip(ship1, 0, 2, false);
+        expect(gameboard.placeShip(ship2, 0, 0, false)).toBe(false);
+        
+        //CHECK IF SHIP 2 IS NOT PLACED
+        expect(gameboard.board[0][0]).toBe(null);
+        expect(gameboard.board[0][1]).toBe(null);
+        expect(gameboard.board[0][2]).toBe(ship1);
+      });
+      
+      //todo: work on this case later
+      // test('prevents adjascent placement', () => {
+      //   const gameboard = new GameBoard();
+      //   const ship1 = new Ship(3);
+      //   const ship2 = new Ship(3);
+      //   gameboard.placeShip(ship1, 0, 0, false);
+      //   expect(gameboard.placeShip(ship2, 0, 3, false)).toBe(false);
+      // });
+
+      test('prevents wrapping around the board- vertical', () => {
+        const gameboard = new GameBoard();
+        const ship = new Ship(3);
+        expect(gameboard.placeShip(ship, 9, 9, true)).toBe(false);
+      });
+
+      test('prevents wrapping around the board- horizontal', () => {
+        const gameboard = new GameBoard();
+        const ship = new Ship(3);
+        expect(gameboard.placeShip(ship, 9, 9, false)).toBe(false);
+      });
+      
+    });
 });
