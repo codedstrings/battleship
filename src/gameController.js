@@ -1,9 +1,10 @@
 const { Ship } = require('./ship.js');
+const { Player } = require('./player.js');
 class GameController {
     constructor(player1, player2) {
-        this.player1 = player1;
-        this.player2 = player2;
-        this.currentPlayer = player1;
+        this.player1 = new Player(player1);
+        this.player2 = new Player(player2);
+        this.currentPlayer = this.player1;
         this.ships = [
             new Ship(3),
             new Ship(2),

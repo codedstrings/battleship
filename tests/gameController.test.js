@@ -3,27 +3,27 @@ const {Player} = require('../src/player');
 
 describe('GameController:', () => { 
     describe('basic Tests:', () => { 
-        let player1, player2, game;
+        let player1Name, player2Name, game;
         beforeEach(() => {
-            player1 = new Player('Player 1');
-            player2 = new Player('Player 2');
-            game = new GameController(player1, player2);
+            player1Name = 'player1';
+            player2Name = 'player2';
+            game = new GameController(player1Name, player2Name);
         });
         test('should have 2 players', () => {
-            expect(game.player1).toEqual(player1);
-            expect(game.player2).toBe(player2);
+            expect(game.player1.name).toBe(player1Name);
+            expect(game.player2.name).toBe(player2Name);
         });
         test('should have a currentPlayer', () => {
-            expect(game.currentPlayer).toBe(player1);
+            expect(game.currentPlayer).toBe(game.player1);
         });
         test('Each player should have a gameboard', () => {
-            expect(player1.gameboard).toBeDefined();
-            expect(player2.gameboard).toBeDefined();
+            expect(game.player1.gameboard).toBeDefined();
+            expect(game.player2.gameboard).toBeDefined();
         });
         test('Each player should have 3 ships on board after game starts', () => {
             game.startGame();
-            expect(player1.gameboard.allShips.length).toBe(3);
-            expect(player2.gameboard.allShips.length).toBe(3);
+            expect(game.player1.gameboard.allShips.length).toBe(3);
+            expect(game.player2.gameboard.allShips.length).toBe(3);
         });
      })
  });
