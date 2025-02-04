@@ -52,6 +52,7 @@ describe('Gameboard', () => {
     });
 
     describe('allSunk', ()=>{
+      let gameboard, ship1, ship2;
       beforeEach(()=>{
         gameboard = new GameBoard();
         ship1 = new Ship(3);
