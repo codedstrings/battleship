@@ -68,4 +68,15 @@ describe('GameController:', () => {
            //todo
         });
     });
+
+    describe('edgeCases', () => { 
+        test('game should not allow attacks outside the board', () => {
+            const game = new GameController('player1', 'player2');
+            game.startGame();
+            expect(()=>{game.playRound(10, 10)}).toThrow('Invalid attack coordinates');
+            expect(()=>{game.playRound(-1, 0)}).toThrow('Invalid attack coordinates');
+            expect(()=>{game.playRound(0, -1)}).toThrow('Invalid attack coordinates');
+            expect(()=>{game.playRound(0, 10)}).toThrow('Invalid attack coordinates');
+        });
+     })
  });

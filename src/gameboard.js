@@ -49,6 +49,9 @@ class GameBoard{
     }
 
     receiveAttack(x, y){
+        if(x < 0 || x > 9 || y < 0 || y > 9){
+            throw new Error('Invalid attack coordinates');
+        }
         if(this.board[x][y] === null){
             this.missedShots.push([x, y]);
         }else{
