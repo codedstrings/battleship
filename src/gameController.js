@@ -25,13 +25,14 @@ class GameController {
         // }
     }
 
-    playRound(player, opponent, x, y) {
-        player.attack(opponent, x, y);
+    playRound(x, y) {
+        const opponent = this.currentPlayer === this.player1 ? this.player2 : this.player1;
+        this.currentPlayer.attack(opponent, x, y);
         if(opponent.gameboard.allSunk()){
-            this.winner = player;
+            this.winner = this.currentPlayer;
             this.isGameOver = true;
         }
-        this.currentPlayer = this.currentPlayer === player ? opponent : player;
+        this.currentPlayer = opponent;
     }
 }
 

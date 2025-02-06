@@ -41,18 +41,24 @@ describe('GameController:', () => {
             game.startGame();
         });
         test('should switch current player after each round', () => {
-            game.playRound(game.currentPlayer, game.player1 === game.currentPlayer ? game.player2 : game.player1, 0, 0);
+            game.playRound(0, 0);
+            expect(game.currentPlayer).toBe(game.player2);
+
+            game.playRound(1, 1);
+            expect(game.currentPlayer).toBe(game.player1);
+
+            game.playRound(9, 0);
             expect(game.currentPlayer).toBe(game.player2);
         });
         test('should hit the opponents ship when attacked correctly', () => {
-            game.playRound(game.currentPlayer, game.player1 === game.currentPlayer ? game.player2 : game.player1, 0, 0);
+            game.playRound(0, 0);
             //opponents ship should be hit
             expect(game.player2.gameboard.allShips[0].hits).toBe(1);
             //players ship should not be hit
             expect(game.player1.gameboard.allShips[0].hits).toBe(0);
         });
         test('should miss the ship when attacked wrong', () => {
-            game.playRound(game.currentPlayer, game.player1 === game.currentPlayer ? game.player2 : game.player1, 1, 1);
+            game.playRound(1, 1);
             expect(game.player2.gameboard.missedShots.length).toBe(1);
             //both players ship should not be hit
             expect(game.player1.gameboard.allShips[0].hits).toBe(0);
