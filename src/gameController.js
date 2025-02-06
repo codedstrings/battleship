@@ -5,20 +5,15 @@ class GameController {
         this.player1 = new Player(player1);
         this.player2 = new Player(player2);
         this.currentPlayer = this.player1;
-        this.ships = [
-            new Ship(3),
-            new Ship(2),
-            new Ship(1)
-        ]
         this.winner = null;
         this.isGameOver = false;
     }
 
     placeShipsForPlayer(player){
         //hardcoded for now //todo: make it dynamic
-        player.gameboard.placeShip(this.ships[0], 0, 0, false);
-        player.gameboard.placeShip(this.ships[1], 0, 3, false);
-        player.gameboard.placeShip(this.ships[2], 0, 6, false);
+        player.gameboard.placeShip(player.ships[0], 0, 0, false);
+        player.gameboard.placeShip(player.ships[1], 0, 3, false);
+        player.gameboard.placeShip(player.ships[2], 0, 6, false);
     }
 
     startGame() {
