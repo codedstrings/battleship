@@ -2,6 +2,7 @@ class GameBoard{
     constructor(){
         this.board = Array(10).fill(null).map(() => Array(10).fill(null));
         this.missedShots = [];
+        this.allHits = [];
         this.allShips = [];
     }
     placeShip(ship, x, y, isVertical){
@@ -49,7 +50,10 @@ class GameBoard{
     }
 
     receiveAttack(x, y){
-        if(x < 0 || x > 9 || y < 0 || y > 9){
+        const alreadyAttacked = this.allHits.find(([hitX, hitY]) => hitX === x && hitY === y) ||
+            this.missedShots.find(([missX, missY]) => missX === x && missY === y);
+
+        if(x < 0 || x > 9 || y < 0 || y > 9 || alreadyAttacked){
             throw new Error('Invalid attack coordinates');
         }
         if(this.board[x][y] === null){
@@ -57,6 +61,11 @@ class GameBoard{
         }else{
             //call ships hit function
             this.board[x][y].hit();
+            this.allHits.push([x, y]);
+
+            if (this.board[x][y].isSunk) {
+                console.log('Ship has been sunk!');
+            }
         }
     }
     

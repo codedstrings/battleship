@@ -129,23 +129,28 @@ describe('Gameboard', () => {
     });
     
     describe('Recieve Attacks', () => { 
-      test('should miss the ship when attacked wrong', () => {
-        const gameboard = new GameBoard();
-        const ship = new Ship(3);
+      let gameboard, ship;
+      beforeEach(()=>{
+        gameboard = new GameBoard();
+        ship = new Ship(3);
         gameboard.placeShip(ship, 0, 0, false);
+      });
+
+      test('should miss the ship when attacked wrong', () => {
         gameboard.receiveAttack(1, 1);
         expect(gameboard.missedShots.length).toBe(1);
         expect(ship.getHits()).toBe(0);
       });
       test('should throw error for out of board attacks',()=>{
-        const gameboard = new GameBoard();
-        const ship = new Ship(3);
-        gameboard.placeShip(ship, 0, 0, false);
         expect(()=>gameboard.receiveAttack(10, 10)).toThrow('Invalid attack coordinates');
         expect(()=>gameboard.receiveAttack(-1, 0)).toThrow('Invalid attack coordinates');
         expect(()=>gameboard.receiveAttack(0, -1)).toThrow('Invalid attack coordinates');
         expect(()=>gameboard.receiveAttack(0, 10)).toThrow('Invalid attack coordinates');
         expect(()=>gameboard.receiveAttack(10, 0)).toThrow('Invalid attack coordinates');
-      })
+      });
+      test('should not allow attacking the same coordinates',()=>{
+        gameboard.receiveAttack(1, 1);
+        expect(()=>gameboard.receiveAttack(1,1)).toThrow('Invalid attack coordinates');
+      });
     });
 });
