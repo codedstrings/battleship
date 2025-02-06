@@ -40,6 +40,7 @@ describe('GameController:', () => {
             game = new GameController(player1Name, player2Name);
             game.startGame();
         });
+    
         test('should switch current player after each round', () => {
             game.playRound(0, 0);
             expect(game.currentPlayer).toBe(game.player2);
@@ -67,6 +68,41 @@ describe('GameController:', () => {
         test('should only switch player after a miss', () => {
            //todo
         });
+        test('should be able to shink opponents ships', () => {
+            game.playRound(0, 0);//player 1 attacks
+            game.playRound(0, 0);//player 2 attacks
+            game.playRound(0, 1);//player 1 attacks
+            game.playRound(0, 1);//player 2 attacks
+            game.playRound(0, 2);//player 1 attacks
+            expect(game.player2.gameboard.allShips[0].isSunk).toBe(true);
+            expect(game.player1.gameboard.allShips[0].isSunk).toBe(false);
+
+            game.playRound(0, 2); //player2 attacks
+            expect(game.player1.gameboard.allShips[0].isSunk).toBe(true);
+
+            //other ships are not sunk. 
+            expect(game.player1.gameboard.allShips[1].isSunk).toBe(false);
+            expect(game.player1.gameboard.allShips[2].isSunk).toBe(false);
+            expect(game.player2.gameboard.allShips[1].isSunk).toBe(false);
+            expect(game.player2.gameboard.allShips[2].isSunk).toBe(false);
+        });
+        test('should end the game when all ships are sunk for a player',()=>{
+            game.player2.gameboard.allShips[0].isSunk = true;
+            game.player2.gameboard.allShips[1].isSunk = true;
+
+            game.playRound(0, 6);//player 1 attacks
+            expect(game.player2.gameboard.allSunk()).toBeTruthy();
+            expect(game.isGameOver).toBeTruthy();
+            
+        });
+        test('player1 should be the winner if all ships of player2 is sunk',()=>{
+            game.player2.gameboard.allShips[0].isSunk = true;
+            game.player2.gameboard.allShips[1].isSunk = true;
+
+            game.playRound(0, 6);//player 1 attacks
+            expect(game.player2.gameboard.allSunk()).toBeTruthy();
+            expect(game.winner).toBe(game.player1);
+        })
     });
 
     describe('edgeCases', () => { 
