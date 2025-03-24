@@ -1,5 +1,5 @@
-const {GameController} = require('../src/gameController');
-const {Player} = require('../src/player');
+const {GameController} = require('../src/modules/gameController');
+const {Player} = require('../src/modules/player');
 
 describe('GameController:', () => { 
     describe('basic Tests:', () => { 

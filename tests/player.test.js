@@ -1,5 +1,5 @@
-const {Player} = require('../src/player.js');
-const { Ship } = require('../src/ship.js');
+const {Player} = require('../src/modules/player.js');
+const { Ship } = require('../src/modules/ship.js');
 
 describe('player', () => { 
     test('should have a gameboard', () => { 
