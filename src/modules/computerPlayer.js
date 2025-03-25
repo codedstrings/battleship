@@ -1,5 +1,5 @@
-// const { Player } = require('./player');
-import { Player } from "./player";
+const { Player } = require('./player');
+// import { Player } from "./player";
 
 class ComputerPlayer extends Player {
     constructor() {
@@ -37,4 +37,4 @@ class ComputerPlayer extends Player {
     }
 }
 
-export default ComputerPlayer;
+exports.ComputerPlayer = ComputerPlayer;
