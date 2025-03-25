@@ -4,8 +4,7 @@ const { ComputerPlayer } = require('./computerPlayer.js');
 class GameController {
     constructor(player1, player2) {
         this.player1 = new Player(player1);
-        // this.player2 = new Player(player2);
-        this.player2 = new ComputerPlayer(player2);
+        this.player2 = player2 === 'Computer' ? new ComputerPlayer(player2) : new Player(player2);
         this.currentPlayer = this.player1;
         this.winner = null;
         this.isGameOver = false;
