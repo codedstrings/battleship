@@ -40,6 +40,7 @@ export class GameUI {
     createCell(x, y, isPlayerBoard) {
         const cell = document.createElement('div');
         cell.className = 'cell';
+        cell.classList.add('hoverClass');
         cell.dataset.x = x;
         cell.dataset.y = y;
 
@@ -90,11 +91,13 @@ export class GameUI {
             // Check for hits
             if (gameboard.allHits.some(([hitX, hitY]) => hitX === x && hitY === y)) {
                 cells[i].classList.add('hit');
+                cells[i].classList.remove('hoverClass');
             }
             
             // Check for misses
             if (gameboard.missedShots.some(([missX, missY]) => missX === x && missY === y)) {
                 cells[i].classList.add('miss');
+                cells[i].classList.remove('hoverClass');
             }
         }
     }

@@ -43,7 +43,7 @@ body {
     transition: background-color 0.2s;
 }
 
-.cell:hover {
+.cell.hoverClass:hover {
     background-color: #e6e6e6;
 }
 
