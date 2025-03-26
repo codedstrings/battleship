@@ -1,5 +1,5 @@
 // Import the Ship class
-const { Ship } = require('../src/ship');
+const { Ship } = require('../src/modules/ship');
 
 describe('Ship Class', () => {
     test('should create a ship with the correct length', () => {

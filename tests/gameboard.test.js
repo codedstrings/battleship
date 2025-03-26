@@ -1,6 +1,6 @@
 
-const {GameBoard} = require('../src/gameboard');
-const { Ship } = require('../src/ship');
+const {GameBoard} = require('../src/modules/gameboard');
+const { Ship } = require('../src/modules/ship');
 
 describe('Gameboard', () => {
     test('can place ship horizontally', () => {
