@@ -43,7 +43,6 @@ class GameController {
     
         // If the computer is playing, it should attack automatically
         if (this.currentPlayer.name === "Computer") {
-            setTimeout(() => {
                 if (typeof this.currentPlayer.makeRandomMove === "function") {
                     const [compX, compY] = this.currentPlayer.makeRandomMove(this.player1);
                     console.log(`Computer attacks at ${compX}, ${compY}`);
@@ -53,10 +52,8 @@ class GameController {
                     this.winner = this.currentPlayer;
                     this.isGameOver = true;
                 }
-    
                 // Switch back to player
                 this.currentPlayer = this.player1;
-            }, 500); // Small delay for UI feedback
         }
     }
     
