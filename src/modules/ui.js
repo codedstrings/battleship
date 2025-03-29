@@ -1,3 +1,4 @@
+import { ComputerPlayer } from "./computerPlayer";
 import { GameController } from "./gameController";
 
 export class GameUI {
@@ -10,13 +11,122 @@ export class GameUI {
         this.winnerTextElement = document.getElementById('winner-text');
         this.restartButton = document.getElementById('restart-btn');
         
+        //elements for ship placement
+        this.shipSelectionModal = document.querySelector('#ship-selection-modal');
+        this.shipPlacementModal = document.querySelector('#ship-placement-modal');
+        this.currentShipIndex = 0;
+        this.isPlacingShips = true;
+        this.isVertical = false; // false: horizontal, true: vertical
+
         this.initialize();
     }
 
+    startManualPlacement() {
+        this.shipSelectionModal.classList.remove('active');
+        this.showShipPlacementModal();
+    }
+
+    showShipPlacementModal() {
+        // Add event listeners
+        const horizontalBtn = this.shipPlacementModal.querySelector('#horizontal-btn');
+        horizontalBtn.addEventListener('click', () => this.setShipOrientation(false));
+
+        const verticalBtn = this.shipPlacementModal.querySelector('#vertical-btn');
+        verticalBtn.addEventListener('click', () => this.setShipOrientation(true));
+
+        this.updateShipPlacementInstructions();
+        this.shipPlacementModal.classList.add('active');
+    }
+
+    setShipOrientation(isVertical) {
+        this.isVertical = isVertical;
+        this.shipPlacementModal.classList.remove('active');
+        
+        // Enable board click for ship placement
+        const playerCells = this.playerBoard.getElementsByClassName('cell');
+        Array.from(playerCells).forEach(cell => {
+            cell.classList.add('placeable');
+        });
+    }
+
+    updateShipPlacementInstructions() {
+        const instructionsElement = document.getElementById('ship-placement-instructions');
+        const currentShip = this.game.player1.ships[this.currentShipIndex];
+        instructionsElement.textContent = `Place your ship of length ${currentShip.length}`;
+    }
+
+    randomizeShipPlacement() {
+        this.shipSelectionModal.classList.remove('active');
+        
+        // Clear existing ship placements
+        this.game.player1.gameboard.board = Array(10).fill(null).map(() => Array(10).fill(null));
+        this.game.player1.gameboard.allShips = [];
+
+        // Use computer's auto placement method
+        this.game.player1.autoPlaceShips();
+        this.createBoards();
+        
+        // Complete ship placement
+        this.completeShipPlacement();
+    }
+
     initialize() {
-        this.game.startGame();
         this.createBoards();
         this.attachEventListeners();
+        this.startShipPlacement();
+    }
+
+    startShipPlacement() {
+        this.isPlacingShips = true;
+        this.shipSelectionModal.classList.add('active');
+        this.currentShipIndex = 0;
+    }
+
+    handleShipPlacement(e) {
+        if (!this.isPlacingShips || !e.target.classList.contains('placeable')) return;
+
+        const x = parseInt(e.target.dataset.x);
+        const y = parseInt(e.target.dataset.y);
+        const currentShip = this.game.player1.ships[this.currentShipIndex];
+
+        // Attempt to place the ship
+        const placed = this.game.player1.gameboard.placeShip(
+            currentShip, 
+            x, 
+            y, 
+            this.isVertical
+        );
+
+        if (placed) {
+            this.createBoards(); // Refresh board to show new ship
+            this.currentShipIndex++;
+
+            // Check if all ships are placed
+            if (this.currentShipIndex >= this.game.player1.ships.length) {
+                this.completeShipPlacement();
+            } else {
+                this.startManualPlacement();
+            }
+        } else {
+            alert('Invalid ship placement. Try again.');
+        }
+    }
+
+    completeShipPlacement() {
+        this.isPlacingShips = false;
+        
+        // Remove placeable class
+        const playerCells = this.playerBoard.getElementsByClassName('cell');
+        Array.from(playerCells).forEach(cell => {
+            cell.classList.remove('placeable');
+        });
+        
+        // Place computer ships randomly
+        if (this.game.player2 instanceof ComputerPlayer) {
+            this.game.player2.autoPlaceShips();
+        }
+        
+        this.createBoards();
         this.updateDisplay();
     }
 
@@ -34,6 +144,14 @@ export class GameUI {
                 this.playerBoard.appendChild(playerCell);
                 this.enemyBoard.appendChild(enemyCell);
             }
+        }
+
+        // Add click event for manual ship placement
+        if (this.isPlacingShips) {
+            const playerCells = this.playerBoard.getElementsByClassName('cell');
+            Array.from(playerCells).forEach(cell => {
+                cell.addEventListener('click', (e) => this.handleShipPlacement(e));
+            });
         }
     }
 
@@ -58,8 +176,9 @@ export class GameUI {
         return cell;
     }
 
+    // Rest of the methods remain the same as in the previous implementation
     handleCellClick(x, y) {
-        if (this.game.isGameOver) return;
+        if (this.isPlacingShips || this.game.isGameOver) return;
         
         try {
             this.game.playRound(x, y);
@@ -114,6 +233,10 @@ export class GameUI {
             this.gameOverElement.classList.remove('active');
             this.initialize();
         });
+        // Add event listeners to ship selection modal buttons
+        const manualBtn = this.shipSelectionModal.querySelector('#manual-placement-btn');
+        const randomBtn = this.shipSelectionModal.querySelector('#random-placement-btn');
+        manualBtn.addEventListener('click', () => this.startManualPlacement());
+        randomBtn.addEventListener('click', () => this.randomizeShipPlacement());
     }
 }
-
