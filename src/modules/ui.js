@@ -12,65 +12,13 @@ export class GameUI {
         this.restartButton = document.getElementById('restart-btn');
         
         //elements for ship placement
-        this.shipSelectionModal = this.createShipSelectionModal();
-        this.shipPlacementModal = this.createShipPlacementModal();
+        this.shipSelectionModal = document.querySelector('#ship-selection-modal');
+        this.shipPlacementModal = document.querySelector('#ship-placement-modal');
         this.currentShipIndex = 0;
         this.isPlacingShips = true;
         this.isVertical = false; // false: horizontal, true: vertical
 
         this.initialize();
-    }
-
-    createShipSelectionModal() {
-        const modal = document.createElement('div');
-        modal.id = 'ship-selection-modal';
-        modal.className = 'ship-placement-modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <h2>Ship Placement</h2>
-                <p>How would you like to place your ships?</p>
-                <div class="placement-controls">
-                    <button id="manual-placement-btn">Place Manually</button>
-                    <button id="random-placement-btn">Random Placement</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-
-        // Add event listeners
-        const manualBtn = modal.querySelector('#manual-placement-btn');
-        manualBtn.addEventListener('click', () => this.startManualPlacement());
-
-        const randomBtn = modal.querySelector('#random-placement-btn');
-        randomBtn.addEventListener('click', () => this.randomizeShipPlacement());
-
-        return modal;
-    }
-
-    createShipPlacementModal() {
-        const modal = document.createElement('div');
-        modal.id = 'ship-placement-modal';
-        modal.className = 'ship-placement-modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <h2>Place Your Ships</h2>
-                <p id="ship-placement-instructions">Place your ship</p>
-                <div class="placement-controls">
-                    <button id="horizontal-btn">Horizontal</button>
-                    <button id="vertical-btn">Vertical</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-
-        // Add event listeners
-        const horizontalBtn = modal.querySelector('#horizontal-btn');
-        horizontalBtn.addEventListener('click', () => this.setShipOrientation(false));
-
-        const verticalBtn = modal.querySelector('#vertical-btn');
-        verticalBtn.addEventListener('click', () => this.setShipOrientation(true));
-
-        return modal;
     }
 
     startManualPlacement() {
@@ -79,6 +27,13 @@ export class GameUI {
     }
 
     showShipPlacementModal() {
+        // Add event listeners
+        const horizontalBtn = this.shipPlacementModal.querySelector('#horizontal-btn');
+        horizontalBtn.addEventListener('click', () => this.setShipOrientation(false));
+
+        const verticalBtn = this.shipPlacementModal.querySelector('#vertical-btn');
+        verticalBtn.addEventListener('click', () => this.setShipOrientation(true));
+
         this.updateShipPlacementInstructions();
         this.shipPlacementModal.classList.add('active');
     }
@@ -116,7 +71,6 @@ export class GameUI {
     }
 
     initialize() {
-        this.game.startGame();
         this.createBoards();
         this.attachEventListeners();
         this.startShipPlacement();
@@ -279,5 +233,10 @@ export class GameUI {
             this.gameOverElement.classList.remove('active');
             this.initialize();
         });
+        // Add event listeners to ship selection modal buttons
+        const manualBtn = this.shipSelectionModal.querySelector('#manual-placement-btn');
+        const randomBtn = this.shipSelectionModal.querySelector('#random-placement-btn');
+        manualBtn.addEventListener('click', () => this.startManualPlacement());
+        randomBtn.addEventListener('click', () => this.randomizeShipPlacement());
     }
 }
