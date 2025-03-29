@@ -11,10 +11,10 @@ class GameController {
     }
 
     placeShipsForPlayer(player){
-        //hardcoded for now //todo: make it dynamic
-        player.gameboard.placeShip(player.ships[0], 0, 0, false);
-        player.gameboard.placeShip(player.ships[1], 0, 3, false);
-        player.gameboard.placeShip(player.ships[2], 0, 6, false);
+        // //hardcoded for now //todo: make it dynamic
+        // player.gameboard.placeShip(player.ships[0], 0, 0, false);
+        // player.gameboard.placeShip(player.ships[1], 0, 3, false);
+        // player.gameboard.placeShip(player.ships[2], 0, 6, false);
     }
 
     startGame() {
