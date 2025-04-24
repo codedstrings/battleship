@@ -3,6 +3,8 @@ A javascript implementation of the classic Battleship board game, focusing on Te
 
 ![Battleship Game](./assets/battleship-homepage.png)
 
+### Live Link: https://codedstrings.github.io/battleship/
+
 ## About the Project
 
 This project is an implementation of the classic Battleship game where players strategically place ships on a grid and take turns guessing the location of their opponent's ships. The game features:
