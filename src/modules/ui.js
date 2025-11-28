@@ -10,6 +10,7 @@ export class GameUI {
         this.gameOverElement = document.getElementById('game-over');
         this.winnerTextElement = document.getElementById('winner-text');
         this.restartButton = document.getElementById('restart-btn');
+        this.shipSunkNotification = document.getElementById('ship-sunk-notification');
         
         //elements for ship placement
         this.shipSelectionModal = document.querySelector('#ship-selection-modal');
@@ -181,8 +182,13 @@ export class GameUI {
         if (this.isPlacingShips || this.game.isGameOver) return;
         
         try {
-            this.game.playRound(x, y);
+            const result = this.game.playRound(x, y);
             this.updateDisplay();
+            
+            // Show notification if a ship was sunk
+            if (result && result.attackResult && result.attackResult.sunk) {
+                this.showShipSunkNotification(result.opponentName, result.attackResult.length);
+            }
             
             if (this.game.isGameOver) {
                 this.showGameOver();
@@ -192,6 +198,15 @@ export class GameUI {
         }
     }
 
+    showShipSunkNotification(playerName, shipLength) {
+    this.shipSunkNotification.textContent = `${playerName}'s ship of length ${shipLength} has been sunk!`;
+    this.shipSunkNotification.style.display = 'block';
+    
+    // Hide the notification after animation completes
+    setTimeout(() => {
+        this.shipSunkNotification.style.display = 'none';
+    }, 2000);
+}
     updateDisplay() {
         this.updateBoard(this.playerBoard, this.game.player1.gameboard);
         this.updateBoard(this.enemyBoard, this.game.player2.gameboard);
@@ -227,6 +242,15 @@ export class GameUI {
         this.gameOverElement.classList.add('active');
     }
 
+    showShipSunkNotification(playerName, shipLength) {
+        this.shipSunkNotification.textContent = `${playerName}'s ship of length ${shipLength} has been sunk!`;
+        this.shipSunkNotification.style.display = 'block';
+        
+        // Hide the notification after animation completes
+        setTimeout(() => {
+            this.shipSunkNotification.style.display = 'none';
+        }, 2000);
+    }
     attachEventListeners() {
         this.restartButton.addEventListener('click', () => {
             this.game = new GameController('Player', 'Computer');

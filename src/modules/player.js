@@ -13,7 +13,7 @@ class Player {
     }
 
     attack(opponent, x, y) {
-        opponent.gameboard.receiveAttack(x, y);
+       return opponent.gameboard.receiveAttack(x, y);
     }
 
     // Method to automatically place ships randomly

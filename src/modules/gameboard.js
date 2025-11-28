@@ -52,20 +52,26 @@ class GameBoard{
     receiveAttack(x, y){
         const alreadyAttacked = this.allHits.find(([hitX, hitY]) => hitX === x && hitY === y) ||
             this.missedShots.find(([missX, missY]) => missX === x && missY === y);
-
+    
         if(x < 0 || x > 9 || y < 0 || y > 9 || alreadyAttacked){
             throw new Error('Invalid attack coordinates');
         }
+        
         if(this.board[x][y] === null){
             this.missedShots.push([x, y]);
-        }else{
+            return { hit: false };
+        } else {
             //call ships hit function
-            this.board[x][y].hit();
+            const ship = this.board[x][y];
+            ship.hit();
             this.allHits.push([x, y]);
-
-            if (this.board[x][y].isSunk) {
-                console.log('Ship has been sunk!');
-            }
+    
+            // Return whether this hit sunk the ship
+            return { 
+                hit: true, 
+                sunk: ship.isSunk,
+                length: ship.length 
+            };
         }
     }
     

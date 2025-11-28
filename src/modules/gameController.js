@@ -30,12 +30,18 @@ class GameController {
         const opponent = this.currentPlayer === this.player1 ? this.player2 : this.player1;
     
         // Player attacks first
-        this.currentPlayer.attack(opponent, x, y);
+        const attackResult = this.currentPlayer.attack(opponent, x, y);
+        
+        // Return attack result to UI
+        const result = {
+            playerName: this.currentPlayer.name,
+            opponentName: opponent.name,
+            attackResult: attackResult
+        };
         
         if (opponent.gameboard.allSunk()) {
             this.winner = this.currentPlayer;
             this.isGameOver = true;
-            return; // Stop the game if the player wins
         }
     
         // Switch turn
@@ -43,18 +49,21 @@ class GameController {
     
         // If the computer is playing, it should attack automatically
         if (this.currentPlayer.name === "Computer") {
-                if (typeof this.currentPlayer.makeRandomMove === "function") {
-                    const [compX, compY] = this.currentPlayer.makeRandomMove(this.player1);
-                    console.log(`Computer attacks at ${compX}, ${compY}`);
-                } 
+            let computerAttackResult;
+            if (typeof this.currentPlayer.makeRandomMove === "function") {
+                const [compX, compY] = this.currentPlayer.makeRandomMove(this.player1);
+                console.log(`Computer attacks at ${compX}, ${compY}`);
+            }
     
-                if (this.player1.gameboard.allSunk()) {
-                    this.winner = this.currentPlayer;
-                    this.isGameOver = true;
-                }
-                // Switch back to player
-                this.currentPlayer = this.player1;
+            if (this.player1.gameboard.allSunk()) {
+                this.winner = this.currentPlayer;
+                this.isGameOver = true;
+            }
+            // Switch back to player
+            this.currentPlayer = this.player1;
         }
+        
+        return result;
     }
     
 }
